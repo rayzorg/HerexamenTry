@@ -29,9 +29,18 @@ namespace HerexamenTry.Server
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.Authority = "https://dev-6anxoci7.us.auth0.com";
-                options.Audience = "https://api.herexamen.com";
+                options.Authority = "https://dev-6anxoci7.us.auth0.com/";
+                options.Audience = "https://dev-6anxoci7.us.auth0.com/api/v2/";
             });
+
+            services.AddAuth0AuthenticationClient(config =>
+            {
+                config.Domain = "https://dev-6anxoci7.us.auth0.com/";
+                config.ClientId = "nWFUXFYI8C8N2eQz3mQv7gkherBAIb2t";
+                config.ClientSecret = "1116WO3FMCS4cQYZCNz1lsTggyiwYaoNtgpPIi_gQRdqPMZ-OLHwQDyrDCyb64ep";
+            });
+
+            services.AddAuth0ManagementClient().AddManagementAccessToken();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

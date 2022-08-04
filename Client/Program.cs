@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace HerexamenTry.Client
 {
@@ -16,8 +17,18 @@ namespace HerexamenTry.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
+            //builder.RootComponents.Add<HeadOutlet>("head::after");
+            
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddHttpClient("HerexamenTry", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+                   .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+                   .CreateClient("HerexamenTry"));
+            
+           
+
+           // builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 
             builder.Services.AddOidcAuthentication(options =>

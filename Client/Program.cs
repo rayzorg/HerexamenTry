@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using HerexamenTry.Client.Shared;
 
 namespace HerexamenTry.Client
 {
@@ -37,7 +38,7 @@ namespace HerexamenTry.Client
                 options.ProviderOptions.ResponseType = "code";
                 //options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]);
 
-            });
+            }).AddAccountClaimsPrincipalFactory<ArrayClaimsPrincipalFactory<RemoteUserAccount>>(); ;
 
             await builder.Build().RunAsync();
         }

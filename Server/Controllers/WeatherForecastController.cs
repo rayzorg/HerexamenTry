@@ -3,6 +3,7 @@ using HerexamenTry.Shared;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HerexamenTry.Server.Controllers
 {
@@ -35,6 +36,7 @@ namespace HerexamenTry.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public WeatherForecast CreateForecast(WeatherForecast forecast)
         {
             forecasts.Add(forecast);

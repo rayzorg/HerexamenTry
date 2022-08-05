@@ -5,14 +5,30 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity.Name!
-        <a href="#" @onclick="BeginSignOut">Log out</a>
+        @if (context.User.IsInRole("Admin"))
+        {
+            <p> Hello, @context.User.Identity.Name!</p>
+            <a href="#" @onclick="BeginSignOut">Uitloggen</a>
+        }
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/login">Log in</a>
+        <a href="authentication/login">Inloggen als begeleider</a>
     </NotAuthorized>
 </AuthorizeView>
 
+<AuthorizeView>
+    <Authorized>
+        @if (!context.User.IsInRole("Admin"))
+        {
+        <p> Hello, @context.User.Identity.Name!</p> 
+    <a href="#" @onclick="BeginSignOut">Uitloggen</a>
+}
+    
+    </Authorized>
+    <NotAuthorized>
+        <a href="authentication/login">Inloggen als jongere</a>
+    </NotAuthorized>
+</AuthorizeView>
 @code{
     private async Task BeginSignOut(MouseEventArgs args)
     {

@@ -32,6 +32,7 @@ namespace HerexamenTry.Server.Controllers
                 Email = x.Email,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
+                Picture=x.Picture
                
             });
         }

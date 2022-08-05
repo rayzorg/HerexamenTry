@@ -1,4 +1,6 @@
-﻿namespace HerexamenTry.Shared
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace HerexamenTry.Shared
 {
     public static class UserDto
     {
@@ -7,6 +9,7 @@
             public string Email { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
+            public string Picture { get; set; }
            
         }
     }

@@ -1,12 +1,12 @@
 ﻿@page "/fetchdata"
-@using HerexamenTry.Shared
+@using HerexamenTry.Shared.DTO
 @inject HttpClient Http
 @attribute [Authorize]
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (jongeren == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -15,32 +15,36 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>firstname</th>
+                <th>lastname</th>
+                <th>gender</th>
                 <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>email</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var forecast in jongeren)
             {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
+            <tr>
+                <td>@forecast.Firstname</td>
+                <td>@forecast.Lastname</td>
+                <td>@forecast.Gender</td>
+                <td>@forecast.Date</td>
+                <td>@forecast.Email</td>
+                <td>@forecast.Password</td>
+            </tr>
             }
         </tbody>
     </table>
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private JongereDTO[] jongeren;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        jongeren = await Http.GetFromJsonAsync<JongereDTO[]>("https://localhost:44357/api/jongere");
     }
 
 }

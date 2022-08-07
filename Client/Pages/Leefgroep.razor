@@ -3,7 +3,21 @@
 
 @using HerexamenTry.Shared
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
+
 @attribute [Authorize(Roles = "Admin")]
+
+
+<HerexamenTry.Client.Pages.Modal @ref="Modal"></HerexamenTry.Client.Pages.Modal>
+
+<button @onclick="() => Modal.Open()" type="button" class="btn btn-info" style="float: right;">Toevoegen</button>
+
+@code {
+    private HerexamenTry.Client.Pages.Modal Modal { get; set; }
+}
+
+
+
 
 @if (users is null)
 {
@@ -48,6 +62,8 @@ else
     </table>
 }
 
+
+
 @code {
     private IEnumerable<UserDto.Index>? users;
 
@@ -55,4 +71,6 @@ else
     {
         users = await Http.GetFromJsonAsync<UserDto.Index[]>("user");
     }
+
+
 }

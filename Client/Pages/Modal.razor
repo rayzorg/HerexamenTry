@@ -1,0 +1,113 @@
+﻿
+
+@using HerexamenTry.Shared.DTO
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+
+<div class="modal @ModalClass"  tabindex="-1" role="dialog" style="display:@ModalDisplay">
+   
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Jongere toevoegen</h5>
+            </div>
+            <div class="modal-body">
+
+                <EditForm Model="jongere" OnValidSubmit="Add">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <label>Voornaam</label>
+                        <InputText class="form-control" @bind-Value="jongere.Firstname" />
+                        <ValidationMessage For="() => jongere.Firstname" />
+                    </div>
+                    <div class="form-group">
+                        <label>Achternaam</label>
+                        <InputText class="form-control" @bind-Value="jongere.Lastname" />
+                        <ValidationMessage For="() => jongere.Lastname" />
+                    </div>
+                    <div class="form-group">
+                        <label>Geboortedatum</label>
+                        <InputDate class="form-control" @bind-Value="jongere.Date" />
+                        <ValidationMessage For="() => jongere.Date" />
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <InputSelect class="form-control" @bind-Value="jongere.Gender">
+                            <option value="">Kies</option>
+                            <option value="Freezing">Man</option>
+                            <option value="Bracing">Female</option>
+                        </InputSelect>
+                        <ValidationMessage For="() => jongere.Gender" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <InputText class="form-control" @bind-Value="jongere.Email" />
+                        <ValidationMessage For="() => jongere.Email" />
+                    </div>
+                    <div class="form-group">
+                        <label>Wachtwoord</label>
+                        <InputText class="form-control" @bind-Value="jongere.Password" />
+                        <ValidationMessage For="() => jongere.Password" />
+                    </div>
+
+                    <button class="btn btn-primary" type="submit" data-dismiss="modal" @onclick="() => Close()">Toevoegen</button>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">Sluiten</button>
+                </EditForm>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+
+    public Guid Guid = Guid.NewGuid();
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+    private JongereDTO jongere = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        jongere.Date = DateTime.Now;
+    }
+
+    private async Task Add()
+    {
+        var response = await Http.PostAsJsonAsync<JongereDTO>("https://localhost:44357/api/jongere/create", jongere);
+        Console.WriteLine(response);
+        response.EnsureSuccessStatusCode();
+        NavigationManager.NavigateTo("Leefgroep");
+    }
+}

@@ -8,6 +8,10 @@ namespace HerexamenTry.Shared.Domain
 {
     public class Post
     {
+
+        public Jongere Jongere { get; set; }
+       
+        public string Text { get; set; }
         public List<Reactie> Reacties { get; set; }
     }
 }

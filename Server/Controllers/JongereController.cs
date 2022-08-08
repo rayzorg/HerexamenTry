@@ -16,7 +16,7 @@ namespace HerexamenTry.Server.Controllers
     {
 
        
-        private  static readonly List<JongereDTO> jongereList = new();
+        private  static readonly List<JongereDTO> jongereList = new(10);
         static JongereController()
         {
             jongereList.AddRange(Enumerable.Range(1, 5).Select(index => new JongereDTO
@@ -42,6 +42,13 @@ namespace HerexamenTry.Server.Controllers
         public JongereDTO CreateForecast( JongereDTO jongere)
         {
             jongereList.Add(jongere);
+            return jongere;
+        }
+        [HttpPost("delete")]
+        [Authorize(Roles = "Admin")]
+        public JongereDTO DeleteForecast(JongereDTO jongere)
+        {
+            jongereList.Remove(jongere);
             return jongere;
         }
     }

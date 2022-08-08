@@ -1,7 +1,7 @@
 ﻿
 
 @using HerexamenTry.Shared.DTO
-
+@using HerexamenTry.Client.Pages
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
@@ -37,8 +37,8 @@
                         <label>Gender</label>
                         <InputSelect class="form-control" @bind-Value="jongere.Gender">
                             <option value="">Kies</option>
-                            <option value="Freezing">Man</option>
-                            <option value="Bracing">Female</option>
+                            <option value="Man">Man</option>
+                            <option value="Female">Female</option>
                         </InputSelect>
                         <ValidationMessage For="() => jongere.Gender" />
                     </div>
@@ -110,14 +110,17 @@
     {
         var response = await Http.PostAsJsonAsync<JongereDTO>("https://localhost:44357/api/jongere/create", jongere);
         Console.WriteLine(response);
-        if(response.IsSuccessStatusCode != false){
+        if (response.IsSuccessStatusCode != false)
+        {
 
             Close();
+
         }
-        NavigationManager.NavigateTo("Leefgroep");
+       
+        // NavigationManager.NavigateTo("Leefgroep");
 
 
 
-        await Http.GetFromJsonAsync<JongereDTO[]>("https://localhost:44357/api/jongere");
+
     }
 }

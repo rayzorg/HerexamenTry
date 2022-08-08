@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace HerexamenTry.Shared.Domain
 {
-    class Reactie
+    public class Reactie
     {
+        public string Text { get; set; }
     }
 }

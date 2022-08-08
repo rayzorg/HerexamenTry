@@ -1,12 +1,13 @@
 ﻿
 
 @using HerexamenTry.Shared.DTO
+
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
 
-<div class="modal @ModalClass"  tabindex="-1" role="dialog" style="display:@ModalDisplay">
-   
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -52,16 +53,15 @@
                         <ValidationMessage For="() => jongere.Password" />
                     </div>
 
-                    <button class="btn btn-primary" type="submit" data-dismiss="modal" @onclick="() => Close()">Toevoegen</button>
+                    <button class="btn btn-primary" type="submit" data-dismiss="modal">Toevoegen</button>
 
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">Sluiten</button>
                 </EditForm>
             </div>
-            
+
         </div>
     </div>
 </div>
-
 
 
 
@@ -95,6 +95,9 @@
         ShowBackdrop = false;
         StateHasChanged();
     }
+
+
+
     private JongereDTO jongere = new();
 
     protected override void OnInitialized()
@@ -107,7 +110,14 @@
     {
         var response = await Http.PostAsJsonAsync<JongereDTO>("https://localhost:44357/api/jongere/create", jongere);
         Console.WriteLine(response);
-        response.EnsureSuccessStatusCode();
+        if(response.IsSuccessStatusCode != false){
+
+            Close();
+        }
         NavigationManager.NavigateTo("Leefgroep");
+
+
+
+        await Http.GetFromJsonAsync<JongereDTO[]>("https://localhost:44357/api/jongere");
     }
 }

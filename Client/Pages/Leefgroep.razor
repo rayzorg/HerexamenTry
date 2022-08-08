@@ -1,7 +1,7 @@
 ﻿
 @page "/Leefgroep"
 
-@using HerexamenTry.Shared
+@using HerexamenTry.Shared.DTO
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
@@ -18,45 +18,34 @@
 
 
 
-
-@if (users is null)
+@if (jongeren == null)
 {
-    <p>Loading...</p>
-
+    <p><em>Loading...</em></p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Email</th>
-                <th scope="col">Firstname</th>
-                <th scope="col">Lastname</th>
-                <th scope="col">Picture</th>
-                <th scope="col">Profiel</th>
-                <th scope="col">Verwijderen</th>
-
+                <th>firstname</th>
+                <th>lastname</th>
+                <th>gender</th>
+                <th>Date</th>
+                <th>email</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in users)
+            @foreach (var forecast in jongeren)
             {
                 <tr>
-                    <td>@user.Email</td>
-                    <td>@user.FirstName</td>
-                    <td>@user.LastName</td>
-
-                    <td>
-                        <img src="@user.Picture"
-                             alt="..."
-                             class="img-fluid my-1"
-                             style="width: 45px;" />
-                    </td>
-                    <td>@user.FirstName</td>
-                    <td><button type="button" class="btn btn-danger">Verwijderen</button></td>
+                    <td>@forecast.Firstname</td>
+                    <td>@forecast.Lastname</td>
+                    <td>@forecast.Gender</td>
+                    <td>@forecast.Date</td>
+                    <td>@forecast.Email</td>
+                    <td>@forecast.Password</td>
                 </tr>
-
-
             }
         </tbody>
     </table>
@@ -64,12 +53,13 @@ else
 
 
 
+
 @code {
-    private IEnumerable<UserDto.Index>? users;
+    private JongereDTO[] jongeren;
 
     protected override async Task OnInitializedAsync()
     {
-        users = await Http.GetFromJsonAsync<UserDto.Index[]>("user");
+        jongeren = await Http.GetFromJsonAsync<JongereDTO[]>("https://localhost:44357/api/jongere");
     }
 
 

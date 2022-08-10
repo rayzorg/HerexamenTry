@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HerexamenTry.Shared.Services
 {
-    interface IBegeleiderService
+   public interface IBegeleiderService
     {
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace HerexamenTry.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PostController : ControllerBase
     {
        

@@ -9,7 +9,7 @@ namespace HerexamenTry.Server.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
     public class BegeleiderController : Controller
     {

@@ -9,5 +9,7 @@ namespace HerexamenTry.Shared.Domain
     public class Reactie
     {
         public string Text { get; set; }
+
+        public Begeleider Begeleider { get; set; }
     }
 }

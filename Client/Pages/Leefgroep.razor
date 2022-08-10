@@ -8,9 +8,9 @@
 @attribute [Authorize(Roles = "Admin")]
 
 
-<HerexamenTry.Client.Pages.Modal @ref="Modal"></HerexamenTry.Client.Pages.Modal>
 
-<button @onclick="() => Reload()"><span class="oi oi-reload" aria-hidden="true"></span>Lijst ophalen</button>
+
+
 <button @onclick="() =>Open()" type="button" class="btn btn-info" style="float: right;">Toevoegen</button>
 
 @code {
@@ -33,20 +33,22 @@ else
                 <th>gender</th>
                 <th>Date</th>
                 <th>email</th>
+                <th>Username</th>
                 <th>Date</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var forecast in jongeren)
             {
-                <tr>
-                    <td>@forecast.Firstname</td>
-                    <td>@forecast.Lastname</td>
-                    <td>@forecast.Gender</td>
-                    <td>@forecast.Date</td>
-                    <td>@forecast.Email</td>
-                    <td>@forecast.Password</td>
-                </tr>
+            <tr>
+                <td>@forecast.Firstname</td>
+                <td>@forecast.Lastname</td>
+                <td>@forecast.Gender</td>
+                <td>@forecast.Date</td>
+                <td>@forecast.Email</td>
+                <td>@forecast.Username</td>
+                <td>@forecast.Password</td>
+            </tr>
             }
         </tbody>
     </table>
@@ -66,6 +68,11 @@ else
                 <EditForm Model="jongere" OnValidSubmit="Add">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
+                    <div class="form-group">
+                        <label>Username</label>
+                        <InputText class="form-control" @bind-Value="jongere.Username" />
+                        <ValidationMessage For="() => jongere.Username" />
+                    </div>
                     <div class="form-group">
                         <label>Voornaam</label>
                         <InputText class="form-control" @bind-Value="jongere.Firstname" />
@@ -127,13 +134,7 @@ else
         //await InvokeAsync(StateHasChanged);
     }
 
-    public async Task Reload()
-    {
-        jongeren = await Http.GetFromJsonAsync<JongereDTO[]>("https://localhost:44357/api/jongere");
-    }
-
-
-
+ 
 
 
 

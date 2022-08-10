@@ -14,7 +14,8 @@ namespace HerexamenTry.Shared.DTO
        
         public string Firstname { get; set; }
         [Required(ErrorMessage = "Mag niet leeg zijn.")]
-       
+        public string Username { get; set; }
+        [Required(ErrorMessage = "Mag niet leeg zijn.")]
         public string Lastname { get; set; }
        [Required(ErrorMessage = "Mag niet leeg zijn.")]
         public string Gender { get; set; }

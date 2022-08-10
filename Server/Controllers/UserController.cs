@@ -27,6 +27,7 @@ namespace HerexamenTry.Server.Controllers
         public async Task<IEnumerable<UserDto.Index>> GetUsers()
         {
             var users = await _managementApiClient.Users.GetAllAsync(new GetUsersRequest(), new PaginationInfo());
+
             return users.Select(x => new UserDto.Index
             {
                 Email = x.Email,

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HerexamenTry.Shared.Domain;
+using HerexamenTry.Shared.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,9 @@ namespace HerexamenTry.Shared.Services
 {
   public  interface IJongereService
     {
+       Task<IEnumerable<Post>> GetPostsAsync();
+       Task<Post> createPostAsync(PostDTO post);
+
+      
     }
 }

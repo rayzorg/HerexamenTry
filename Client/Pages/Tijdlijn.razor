@@ -1,8 +1,225 @@
 ﻿
 @page "/Tijdlijn"
+@using HerexamenTry.Shared.Domain
+@using HerexamenTry.Shared.DTO
+@using HerexamenTry.Shared
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject HttpClient Http
+
 
 <h3>Tijdlijn</h3>
 
-@code {
+
+
+<AuthorizeView>
+
+    @if (!context.User.IsInRole("Admin"))
+    {
+        <button @onclick="() =>Open()" type="button" class="btn btn-info" style="float: left;">Maak post</button>
+    }
+
+
+</AuthorizeView>
+
+
+@if (posts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+   
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var forecast in posts)
+            {
+                <div class="col">
+                    <div class="card-group">
+                        <div class="card text-dark bg-warning mb-3" style="width: 18rem;">
+
+                            <div class="card-body">
+
+                                <h4 class="card-title bg-transparent border-success">@forecast.Jongere.Username </h4>
+                                <h5 class="card-text bg-transparent border-success">@forecast.Text</h5>
+
+                            </div>
+                            <div class="card-body bg-transparent border-success">
+                                @foreach (var react in forecast.Reacties)
+                                {
+                                    <p>@react.Text</p>
+                                }
+
+                                <AuthorizeView Roles="Admin">
+
+                                    <button @onclick="@(() =>DeleteFromTimeline(forecast.Id))" type="button" class="btn btn-danger" style="float: right;">Gelezen</button>
+
+                                </AuthorizeView>
+
+                                <EditForm Model="reactie" OnValidSubmit="@(()=>PlaatsReactie(forecast.Id))">
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <div class="form-group">
+                                        <label>Reactie plaatsen</label>
+                                        <InputText class="form-control" @bind-Value="reactie.Text" />
+                                        <ValidationMessage For="() => reactie.Text" />
+                                    </div>
+
+                                    <button class="btn btn-primary" type="submit" data-dismiss="modal">Toevoegen</button>
+
+                                   
+                                </EditForm>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+   
 
 }
+
+
+
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">post aanmaken</h5>
+            </div>
+            <div class="modal-body">
+
+                <EditForm Model="post" OnValidSubmit="Add">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <label>Text</label>
+                        <InputText class="form-control" @bind-Value="post.Text" />
+                        <ValidationMessage For="() => post.Text" />
+                    </div>
+
+                    <button class="btn btn-primary" type="submit" data-dismiss="modal">Toevoegen</button>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">Sluiten</button>
+                </EditForm>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private Jongere jong = new();
+
+
+    private ReactieDTO reactie = new();
+    private Reactie[] reacties;
+
+
+    private PostDTO post = new();
+    public Post[] posts;
+    protected override async Task OnInitializedAsync()
+    {
+        // base.OnInitialized();
+        posts = await Http.GetFromJsonAsync<Post[]>("https://localhost:44357/api/jongere/all");
+        reacties = await Http.GetFromJsonAsync<Reactie[]>("https://localhost:44357/api/begeleider/allReacties");
+        //await InvokeAsync(StateHasChanged);
+    }
+
+    public Guid Guid = Guid.NewGuid();
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+
+    public void OpenReactie()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void CloseReactie()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+    private async Task Add()
+    {
+        var response = await Http.PostAsJsonAsync<PostDTO>("https://localhost:44357/api/jongere/create", post);
+        Console.WriteLine(response);
+        if (response.IsSuccessStatusCode != false)
+        {
+            posts = await Http.GetFromJsonAsync<Post[]>("https://localhost:44357/api/jongere/all");
+            Close();
+
+        }
+    }
+    private async Task DeleteFromTimeline(int id)
+    {
+        foreach (var item in posts)
+        {
+            if (item.Id.Equals(id))
+            {
+                var response = await Http.DeleteAsync("https://localhost:44357/api/begeleider/deletePost/" + item.Id);
+            }
+        }
+        posts = await Http.GetFromJsonAsync<Post[]>("https://localhost:44357/api/jongere/all");
+    }
+    private async Task PlaatsReactie(int id)
+    {
+
+        // foreach (var item in reacties)
+        //  {
+        //   if (item.Id.Equals(id))
+        //   {
+        var response = await Http.PostAsJsonAsync<ReactieDTO>("https://localhost:44357/api/begeleider/createReactie/" +id, reactie);
+        Console.WriteLine(response);
+        if (response.IsSuccessStatusCode != false)
+        {
+            reacties = await Http.GetFromJsonAsync<Reactie[]>("https://localhost:44357/api/begeleider/allReacties");
+            posts = await Http.GetFromJsonAsync<Post[]>("https://localhost:44357/api/jongere/all");
+            Close();
+
+        }
+        // }
+    }
+
+
+
+
+}
+

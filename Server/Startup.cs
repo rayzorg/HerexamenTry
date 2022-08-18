@@ -7,6 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using HerexamenTry.Server.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+using HerexamenTry.Shared.Services;
+using HerexamenTry.Server.Services;
 
 namespace HerexamenTry.Server
 {
@@ -23,6 +30,29 @@ namespace HerexamenTry.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<IBegeleiderService, BegeleiderService>();
+            services.AddScoped<IJongereService, JongereService>();
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IReactieService, ReactieService>();
+            services.AddDbContext<HerexamenContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction: sqloptions => {
+                        sqloptions.EnableRetryOnFailure();
+
+                    });
+               }
+               
+                );
+            
+               
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -31,6 +61,10 @@ namespace HerexamenTry.Server
             {
                 options.Authority = "https://dev-6anxoci7.us.auth0.com/";
                 options.Audience = "https://dev-6anxoci7.us.auth0.com/api/v2/";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = ClaimTypes.NameIdentifier
+                };
             });
 
             services.AddAuth0AuthenticationClient(config =>
@@ -41,7 +75,8 @@ namespace HerexamenTry.Server
             });
 
             services.AddAuth0ManagementClient().AddManagementAccessToken();
-            services.AddControllersWithViews();
+            services.AddDatabaseDeveloperPageExceptionFilter();
+          //  services.AddControllersWithViews();
             services.AddRazorPages();
         }
 

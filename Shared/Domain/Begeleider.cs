@@ -10,22 +10,26 @@ namespace HerexamenTry.Shared.Domain
 {
    public class Begeleider
     {
-
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-
+        
         public string Firstname { get; set; }
 
-        public string Lastname { get; set; }
-
+        [Required, Key]
         public string Email { get; set; }
 
-        public string Password { get; set; }
+        public virtual List<Jongere> Jongeren { get; set; }
 
-        public List<Jongere> Jongeren { get; set; }
+        public virtual List<Reactie> Reacties { get; set; }
 
-        public List<Reactie> Reacties { get; set; }
+        public Begeleider()
+        {
+
+        }
+        public Begeleider(string firstname,string email, List<Jongere> jongeren, List<Reactie> reacties)
+        {
+            Firstname = firstname;
+            Email = email;
+            Jongeren = jongeren;
+            Reacties = reacties;
+        }
     }
 }

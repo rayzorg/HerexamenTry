@@ -13,7 +13,6 @@
 
 
 
-<button @onclick="() =>Open()" type="button" class="btn btn-info" style="float: right;">Toevoegen</button>
 
 
 
@@ -24,6 +23,17 @@
 }
 else
 {
+
+    @if (jongeren.Length > 10)
+    {
+        <button @onclick="() =>Open()" type="button" class="btn btn-info" style="float: right;" disabled>Toevoegen</button>
+
+    }
+    else if (jongeren.Length <= 10)
+    {
+        <button @onclick="() =>Open()" type="button" class="btn btn-info" style="float: right;">Toevoegen</button>
+
+    }
     <table class="table">
         <thead>
             <tr>
@@ -33,7 +43,7 @@ else
                 <th>Geboortedatum</th>
                 <th>Email</th>
                 <th>Username</th>
-               
+
                 <th></th>
             </tr>
         </thead>
@@ -47,7 +57,7 @@ else
                     <td>@forecast.Date</td>
                     <td>@forecast.Email</td>
                     <td>@forecast.Username</td>
-                   
+
                     <td>
                         <button type="button" class="btn btn-danger " @onclick="@(() => DeleteUser(@forecast.Email))">Verwijderen</button>
                     </td>

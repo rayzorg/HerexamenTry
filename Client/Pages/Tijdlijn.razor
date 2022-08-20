@@ -38,35 +38,36 @@ else
 
                             <div class="card-body">
 
-                                <h4 class="card-title bg-transparent border-success">@forecast.Jongere.Username </h4>
-                                <h5 class="card-text bg-transparent border-success">@forecast.Text</h5>
+                                <h3 class=" card-title bg-transparent border-success text-primary">@forecast.Jongere.Username </h3>
+                                <h4 class="card-text bg-transparent border-success">@forecast.Text</h4>
 
                             </div>
-                            <div class="card-body bg-transparent border-success">
+                            <div class="card-body bg-transparent bg-danger border-success">
+                                <h5>Reacties</h5>
                                 @foreach (var react in forecast.Reacties)
                                 {
-                                    <p>@react.Text</p>
+                                    <p class="font-weight-bold">@react.Text</p>
                                 }
 
-                            <AuthorizeView Context="authContext" Roles="Admin">
+                                <AuthorizeView Context="authContext" Roles="Admin">
 
-                                <button @onclick="@(() =>DeleteFromTimeline(forecast.Id))" type="button" class="btn btn-danger" style="float: right;">Gelezen</button>
-                                <EditForm Model="reactie" OnValidSubmit="@(()=>PlaatsReactie(forecast.Id))">
-                                    <DataAnnotationsValidator />
-                                    <ValidationSummary />
-                                    <div class="form-group">
-                                        <label>Reactie plaatsen</label>
-                                        <InputText class="form-control" @bind-Value="reactie.Text" />
-                                        <ValidationMessage For="() => reactie.Text" />
-                                    </div>
+                                    <button @onclick="@(() =>DeleteFromTimeline(forecast.Id))" type="button" class="btn btn-danger" style="float: right;">Gelezen</button>
+                                    <EditForm Model="reactie" OnValidSubmit="@(()=>PlaatsReactie(forecast.Id))">
+                                        <DataAnnotationsValidator />
+                                        <ValidationSummary />
+                                        <div class="form-group">
+                                            <label>Reactie plaatsen</label>
+                                            <InputText class="form-control" @bind-Value="reactie.Text" />
+                                            <ValidationMessage For="() => reactie.Text" />
+                                        </div>
 
-                                    <button class="btn btn-primary" type="submit" data-dismiss="modal">Toevoegen</button>
+                                        <button class="btn btn-primary" type="submit" data-dismiss="modal">Toevoegen</button>
 
 
-                                </EditForm>
-                            </AuthorizeView>
+                                    </EditForm>
+                                </AuthorizeView>
 
-                               
+
 
 
                             </div>

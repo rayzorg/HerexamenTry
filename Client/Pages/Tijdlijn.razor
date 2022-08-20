@@ -48,12 +48,9 @@ else
                                     <p>@react.Text</p>
                                 }
 
-                                <AuthorizeView Roles="Admin">
+                            <AuthorizeView Context="authContext" Roles="Admin">
 
-                                    <button @onclick="@(() =>DeleteFromTimeline(forecast.Id))" type="button" class="btn btn-danger" style="float: right;">Gelezen</button>
-
-                                </AuthorizeView>
-
+                                <button @onclick="@(() =>DeleteFromTimeline(forecast.Id))" type="button" class="btn btn-danger" style="float: right;">Gelezen</button>
                                 <EditForm Model="reactie" OnValidSubmit="@(()=>PlaatsReactie(forecast.Id))">
                                     <DataAnnotationsValidator />
                                     <ValidationSummary />
@@ -65,8 +62,11 @@ else
 
                                     <button class="btn btn-primary" type="submit" data-dismiss="modal">Toevoegen</button>
 
-                                   
+
                                 </EditForm>
+                            </AuthorizeView>
+
+                               
 
 
                             </div>

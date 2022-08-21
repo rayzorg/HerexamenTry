@@ -70,8 +70,8 @@ namespace HerexamenTry.Server
             services.AddAuth0AuthenticationClient(config =>
             {
                 config.Domain = "https://dev-6anxoci7.us.auth0.com/";
-                config.ClientId = "nWFUXFYI8C8N2eQz3mQv7gkherBAIb2t";
-                config.ClientSecret = "1116WO3FMCS4cQYZCNz1lsTggyiwYaoNtgpPIi_gQRdqPMZ-OLHwQDyrDCyb64ep";
+                config.ClientId = Configuration["Auth0:ClientId"];
+                config.ClientSecret = Configuration["Auth0:ClientSecret"];
             });
 
             services.AddAuth0ManagementClient().AddManagementAccessToken();
